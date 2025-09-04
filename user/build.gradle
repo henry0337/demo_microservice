@@ -1,0 +1,53 @@
+plugins {
+    id('java')
+    id('java-library')
+    alias(libs.plugins.spring.application)
+    alias(libs.plugins.spring.dependency.management)
+}
+
+group = 'com.example'
+version = '0.1'
+description = "User Service for Demo Microservice"
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom(annotationProcessor)
+    }
+}
+
+ext {
+    set('springCloudVersion', "2025.0.0")
+}
+
+dependencies {
+    implementation(project(':auth'))
+
+    annotationProcessor(libs.spring.configuration.processor)
+
+    // Lombok
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
+
+    // Therapi Javadoc
+    implementation(libs.therapi.javadoc)
+    annotationProcessor(libs.therapi.javadoc.processor)
+
+    // Postgres
+    runtimeOnly(libs.postgres)
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+test {
+    useJUnitPlatform()
+}

@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+    id 'java-library'
+    alias(libs.plugins.spring.application)
+    alias(libs.plugins.spring.dependency.management)
+}
+
+group = 'com.example'
+version = '0.1'
+description = 'Local Eureka server for Demo Microservice'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+ext {
+    set('springCloudVersion', '2025.0.0')
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+dependencies {
+    implementation(libs.spring.web)
+    implementation(libs.spring.cloud.eureka.server)
+    implementation(libs.caffeine)
+}
+
+test {
+    useJUnitPlatform()
+}

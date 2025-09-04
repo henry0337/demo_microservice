@@ -1,0 +1,121 @@
+package com.demo.auth.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Entity(name = "users")
+public class User implements UserDetails {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Getter
+    String id;
+
+    @Column(name = "display_name", nullable = false)
+    @Getter
+    String name;
+
+    @Column(unique = true, nullable = false)
+    String email;
+
+    @Column(nullable = false)
+    String password;
+
+    @Builder.Default
+    @Getter
+    String avatar = "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg";
+
+    @JsonIgnore
+    @Enumerated(EnumType.STRING)
+    @Getter
+    Role role;
+
+    @JsonIgnore
+    @ColumnDefault("0")
+    @Builder.Default
+    @Getter
+    short isAccountExpired = 0;
+
+    @JsonIgnore
+    @ColumnDefault("0")
+    @Builder.Default
+    @Getter
+    short isAccountLocked = 0;
+
+    @JsonIgnore
+    @ColumnDefault("0")
+    @Builder.Default
+    @Getter
+    short isCredentialsExpired = 0;
+
+    @JsonIgnore
+    @ColumnDefault("1")
+    @Builder.Default
+    @Getter
+    short canAuthenticate = 1;
+
+    @JsonIgnore
+    @Builder.Default
+    @Temporal(TemporalType.TIMESTAMP)
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(updatable = false, nullable = false)
+    @Getter
+    Date createdAt = new Date();
+
+    @JsonIgnore
+    @Builder.Default
+    @Temporal(TemporalType.TIMESTAMP)
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(insertable = false)
+    @Getter
+    Date updatedAt = new Date();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.toString()));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return isAccountExpired == 0;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return isAccountLocked == 0;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return isCredentialsExpired == 0;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return canAuthenticate == 1;
+    }
+}

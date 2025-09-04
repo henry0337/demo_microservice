@@ -1,0 +1,18 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+//enableFeaturePreview('STABLE_CONFIGURATION_CACHE')
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenCentral()
+    }
+}
+
+rootProject.name = 'demoMicroservice'
+include('server', 'global', 'user', 'auth', 'payment')

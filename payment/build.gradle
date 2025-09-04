@@ -1,0 +1,36 @@
+plugins {
+    id('java')
+    id('java-library')
+    alias(libs.plugins.spring.application)
+    alias(libs.plugins.spring.dependency.management)
+}
+
+group = 'com.example'
+version = '0.1'
+description = 'Payment service for Demo Microservice'
+
+ext {
+    set('springCloudVersion', '2025.0.0')
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
+    }
+}
+
+dependencies {
+    implementation(project(':global'))
+
+    implementation(libs.spring.web)
+    implementation(libs.spring.data.jpa)
+
+    implementation(libs.lombok)
+    annotationProcessor(libs.lombok)
+
+    compileOnly(libs.jetbrains.annotation)
+}
+
+test {
+    useJUnitPlatform()
+}

@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+    id 'java-library'
+    alias(libs.plugins.spring.application)
+    alias(libs.plugins.spring.dependency.management)
+}
+
+group = 'com.demo'
+version = '0.1'
+description = 'Global module for Demo Microservice'
+
+ext {
+    set('springCloudVersion', "2025.0.0")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+dependencies {
+    implementation(libs.spring.web)
+    implementation(libs.swagger)
+    implementation(libs.spring.data.jpa)
+//    implementation(libs.spring.cloud.circuitbreaker.resilience4j)
+//    implementation(libs.spring.cloud.circuitbreaker.retry)
+//    implementation(libs.spring.kafka)
+
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
+
+    api(libs.javapoet)
+
+    compileOnly(libs.jetbrains.annotation)
+}
+
+test {
+    useJUnitPlatform()
+}

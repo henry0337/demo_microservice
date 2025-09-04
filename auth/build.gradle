@@ -1,0 +1,82 @@
+plugins {
+    id 'java'
+    id 'java-library'
+    alias(libs.plugins.spring.application)
+    alias(libs.plugins.spring.dependency.management)
+}
+
+group = 'com.example'
+version = '0.1'
+description = 'Auth (Authentication and Authorization) service for Demo Microservice'
+
+ext {
+    set('springCloudVersion', "2025.0.0")
+}
+
+dependencies {
+    api(project(':global'))
+
+    api(libs.spring.data.jpa)
+    api(libs.spring.validation)
+    api(libs.spring.security)
+    api(libs.spring.web)
+    api(libs.spring.cloud.eureka.client)
+    api(libs.spring.cloud.circuitbreaker.resilience4j)
+    api(libs.spring.cloud.circuitbreaker.retry)
+    api(libs.spring.cloud.gateway)
+    api(libs.spring.cloud.loadbalancer)
+    api(libs.spring.cloud.openfeign)
+    api(libs.swagger)
+    api(libs.spring.kafka)
+    api(libs.caffeine)
+    api(libs.spring.mail)
+    api(libs.spring.oauth2.resource.server)
+    developmentOnly(libs.spring.devtool)
+    annotationProcessor(libs.spring.configuration.processor)
+
+    // Apache Common Langs
+    implementation(libs.apache.common.langs)
+
+    // PostgreSQL
+    runtimeOnly(libs.postgres)
+
+    // Lombok
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
+    annotationProcessor(libs.lombok.binding.mapstruct) // For MapStruct only
+
+    // MapStruct (with Spring Extension)
+    implementation(libs.mapstruct)
+    implementation(libs.mapstruct.extension)
+    annotationProcessor(libs.mapstruct.processor)
+    annotationProcessor(libs.mapstruct.extension.processor)
+
+    // JJWT
+    api(libs.jjwt.api)
+    api(libs.jjwt.impl)
+    api(libs.jjwt.jackson)
+
+    // Therapi Javadoc
+    implementation(libs.therapi.javadoc)
+    annotationProcessor(libs.therapi.javadoc.processor)
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+compileJava {
+    options.compilerArgs += [
+            '-Amapstruct.suppressGeneratorTimestamp=true',
+            '-Amapstruct.suppressGeneratorVersionInfoComment=true',
+            '-Amapstruct.verbose=true',
+            '-Amapstruct.defaultComponentModel=spring',
+            '-Amapstruct.defaultInjectionStrategy=constructor',
+    ]
+}

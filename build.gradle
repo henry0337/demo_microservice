@@ -1,0 +1,11 @@
+plugins {
+    id 'java'
+    id 'java-library'
+    alias(libs.plugins.spring.application) apply false
+    alias(libs.plugins.spring.dependency.management) apply false
+}
+
+allprojects {
+    group = 'com.example'
+    version = '0.1'
+}
