@@ -11,11 +11,11 @@ package com.demo.global.config;
 //import org.springframework.context.annotation.Configuration;
 //import org.springframework.retry.policy.TimeoutRetryPolicy;
 
-import java.time.Duration;
-
+/**
+ * @author <a href="https://github.com/henry0337">Moineau</a>
+ */
 //@Configuration
 public class CircuitBreakerConfiguration {
-
 //    @Bean
 //    Customizer<Resilience4JCircuitBreakerFactory> defaultCustomizer() {
 //        return factory ->

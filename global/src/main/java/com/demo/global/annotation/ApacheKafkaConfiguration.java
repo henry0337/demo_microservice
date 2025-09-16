@@ -5,7 +5,7 @@ package com.demo.global.annotation;
 //
 //import java.lang.annotation.*;
 //
-///**
+// /**
 // * Kích hoạt cấu hình <a href="https://kafka.apache.org/">Apache Kafka</a> cho ứng dụng Spring.
 // * <p>
 // * Khi được áp dụng cho một lớp cấu hình, chú thích này hỗ trợ cấu hình Kafka bằng cách đăng ký các bean và các cấu hình
@@ -15,11 +15,11 @@ package com.demo.global.annotation;
 // *
 // * @see EnableKafka
 // * @see Configuration
-// * @author <a href="https://github.com/henry0337">Moineau</a>, <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
+// * @author <a href="https://github.com/henry0337">Moineau</a>
 // */
 //@Configuration
 //@EnableKafka
 //@Target(ElementType.TYPE)
 //@Retention(RetentionPolicy.RUNTIME)
 //@Documented
-//public @interface ApacheKafkaConfiguration { }
+public @interface ApacheKafkaConfiguration { }

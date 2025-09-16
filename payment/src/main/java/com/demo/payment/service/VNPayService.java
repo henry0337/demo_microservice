@@ -1,12 +1,9 @@
 package com.demo.payment.service;
 
-import com.demo.payment.dto.response.VNPayQueryResponse;
 import com.demo.payment.model.*;
 import com.demo.payment.repository.PaymentRepository;
 import com.demo.payment.utility.VNPayUtil;
 import com.demo.global.utility.StringUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.AccessLevel;
@@ -14,11 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,15 +21,17 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * @author Moineau
+ * @author <a href="https://vnpay.vn/">CTT VNPAY</a>,
+ * <a href="https://github.com/henry0337">Moineau</a>,
+ * <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
  */
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class VNPayService {
-    PaymentRepository repository;
-    ObjectMapper mapper;
-    RestTemplate template;
+    PaymentRepository   repository;
+    ObjectMapper        mapper;
+    RestTemplate        template;
 
     @Value("${server.port}")
     @NonFinal
@@ -56,13 +51,11 @@ public class VNPayService {
      * Chức năng được triển khai là chức năng <b>xây dựng URL thanh toán</b> trong VNPay.
      * @param amount   Số tiền thực hiện giao dịch
      * @param ipAddr   Địa chỉ IP của đối tượng thực hiện giao dịch
-     * @param bankCode Loại hình thanh toán, có thể {@code null}
      * @return Một URL điều hướng tới trang web thực hiện thanh toán của VNPay.
      */
     public String createPaymentUrl(
             int amount,
-            String ipAddr,
-            @Nullable String bankCode
+            String ipAddr
     ) {
         final String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"; // URL thanh toán gốc
         final String vnp_Version = "2.1.0"; // Phiên bản của thư viện VNPay
@@ -95,7 +88,6 @@ public class VNPayService {
         vnp_Params.put("vnp_IpAddr", ipAddr);
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
-        if (bankCode != null && !bankCode.isEmpty()) vnp_Params.put("vnp_BankCode", bankCode);
 
         List<String> fieldNames = new ArrayList<>(vnp_Params.keySet());
         Collections.sort(fieldNames);
@@ -141,13 +133,11 @@ public class VNPayService {
         String signedValue = VNPayUtil.hashAllFields(fields);
 
         if (signedValue.equals(secureHash) && "00".equals(responseCode)) {
-            var newBill = new Payment();
-
-            newBill.setOrderId();
+            // TODO:
             return true;
         }
 
-
+        return false;
     }
 
     public Payment getBillingInformation(String orderId, String dateAsString, String ipAddr) {
@@ -189,21 +179,5 @@ public class VNPayService {
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
         vnp_Params.put("vnp_SecureHash", vnp_SecureHash);
-
-        var headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<ObjectNode> entity = new HttpEntity<>(vnp_Params, headers);
-        String request = template.postForEntity(vnp_ApiUrl, entity, String.class).getBody();
-        Object result;
-        try {
-            result = mapper.readValue(request, new TypeReference<>() {});
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-
-        if (result != null) {
-            final var actualResult = (VNPayQueryResponse) result;
-        }
     }
 }

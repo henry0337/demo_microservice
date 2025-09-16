@@ -12,30 +12,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * @author <a href="https://github.com/henry0337">Moineau</a>, <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
+ */
 @ApiController("/api/v1/user")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class UserController {
     UserService service;
 
-    /**
-     * Lấy danh sách tất cả người dùng.
-     *
-     * @return {@link ResponseEntity} chứa danh sách người dùng hoặc thông báo lỗi nếu có sự cố.
-     */
     @GetMapping
     public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(service.findAll());
     }
 
-    /**
-     * Lấy thông tin người dùng dựa trên email.
-     *
-     * @param email Email của người dùng cần tìm.
-     * @return {@link ResponseEntity} chứa thông tin người dùng hoặc thông báo lỗi nếu không tìm thấy.
-     */
     @GetMapping("/{email}")
-    public ResponseEntity<?> getByEmail(@PathVariable String email) {
+    public ResponseEntity<User> getByEmail(@PathVariable String email) {
         return ResponseEntity.ok(service.findByEmail(email));
     }
 
@@ -53,10 +45,9 @@ public class UserController {
 
         if (newUser instanceof Result.Success<?>) {
             return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(newUser);
-        } else if (newUser instanceof Result.Failure<?>) {
+        } else if (newUser instanceof Result.Failure<?, ?>) {
             return ResponseEntity.status(HttpStatusCode.valueOf(400)).body(newUser);
         }
-
         return ResponseEntity.internalServerError().body("Lỗi không xác định!");
     }
 
@@ -76,7 +67,7 @@ public class UserController {
         Result<?, Exception> updatedUser = service.update(email, user);
         if (updatedUser instanceof Result.Success<?>) {
             return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(updatedUser);
-        } else if (updatedUser instanceof Result.Failure<?>) {
+        } else if (updatedUser instanceof Result.Failure<?, ?>) {
             return ResponseEntity.status(HttpStatusCode.valueOf(400)).body(updatedUser);
         }
 
@@ -92,7 +83,7 @@ public class UserController {
      */
     @DeleteMapping("/{email}")
     public ResponseEntity<?> deleteUser(@PathVariable String email) {
-        Result<?, Exception> recordDeleted = service.deleteByEmail(email);
+        Result<?, Exception> recordDeleted = service.delete(email);
         if (recordDeleted.getCode() == 200) {
             return ResponseEntity.ok("Đã xóa bản ghi thành công");
         } else {

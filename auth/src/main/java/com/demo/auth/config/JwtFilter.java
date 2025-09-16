@@ -2,7 +2,6 @@ package com.demo.auth.config;
 
 import com.demo.auth.client.UserClient;
 import com.demo.auth.model.User;
-import com.demo.auth.service.AuthService;
 import com.demo.auth.service.JwtService;
 import com.demo.global.helper.Result;
 import io.micrometer.common.util.StringUtils;
@@ -21,12 +20,16 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * @author <a href="https://github.com/henry0337">Moineau</a>, <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
+ */
 @Component
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
@@ -69,9 +72,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @NonNull
     private UserDetailsService userDetailsService() {
-        return username -> {
-            Result<User, Exception> expectUser = client.findByEmail(username);
-            return expectUser instanceof Result.Success<User> currentUser && currentUser.getBody() != null ? currentUser.getBody() : null;
-        };
+        return client::findByEmail;
     }
 }

@@ -8,15 +8,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import java.lang.annotation.*;
 
 /**
- * Đánh dấu một {@linkplain Configuration lớp cấu hình} được cấu hình dành riêng cho tính năng
+ * Đánh dấu một lớp {@link Configuration @Configuration} được cấu hình dành riêng cho tính năng
  * <a href="https://spring.io/projects/spring-security#overview">bảo mật</a> thuộc
  * <a href="https://docs.spring.io/spring-security/reference/servlet/getting-started.html">framework MVC</a>.
- *
- * @author Moineau
+ * @see EnableWebSecurity
+ * @see EnableMethodSecurity
+ * @author <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
  */
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+//@EnableMethodSecurity(proxyTargetClass = true)
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented

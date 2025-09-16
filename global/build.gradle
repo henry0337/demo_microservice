@@ -23,14 +23,13 @@ dependencies {
     implementation(libs.spring.web)
     implementation(libs.swagger)
     implementation(libs.spring.data.jpa)
+    implementation(libs.spring.mail)
 //    implementation(libs.spring.cloud.circuitbreaker.resilience4j)
 //    implementation(libs.spring.cloud.circuitbreaker.retry)
 //    implementation(libs.spring.kafka)
 
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
-
-    api(libs.javapoet)
 
     compileOnly(libs.jetbrains.annotation)
 }

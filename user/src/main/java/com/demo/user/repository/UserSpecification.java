@@ -5,6 +5,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
+ */
 @Component
 public class UserSpecification {
 

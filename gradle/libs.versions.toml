@@ -10,8 +10,6 @@ poi = "5.4.1"
 caffeine = "3.2.2"
 jetbrainAnnotation = "26.0.2"
 commonLangs = "3.18.0"
-javapoet = "0.7.0"
-sentry = "5.9.0"
 lombokMapstructBinding = "0.2.0"
 
 [libraries]
@@ -49,9 +47,7 @@ poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poi" }
 caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "caffeine" }
 jetbrains-annotation = { module = "org.jetbrains:annotations", version.ref = "jetbrainAnnotation" }
 apache-common-langs = { module = "org.apache.commons:commons-lang3", version.ref = "commonLangs" }
-javapoet = { module = "com.palantir.javapoet:javapoet", version.ref = "javapoet" }
 
 [plugins]
 spring-application = { id = "org.springframework.boot", version.ref = "springBoot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "springDm" }
-sentry = { id = "io.sentry.jvm.gradle", version.ref = "sentry" }

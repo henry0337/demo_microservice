@@ -25,12 +25,11 @@ dependencies {
     api(libs.spring.cloud.circuitbreaker.retry)
     api(libs.spring.cloud.gateway)
     api(libs.spring.cloud.loadbalancer)
-    api(libs.spring.cloud.openfeign)
     api(libs.swagger)
     api(libs.spring.kafka)
     api(libs.caffeine)
-    api(libs.spring.mail)
     api(libs.spring.oauth2.resource.server)
+    implementation(libs.spring.mail)
     developmentOnly(libs.spring.devtool)
     annotationProcessor(libs.spring.configuration.processor)
 

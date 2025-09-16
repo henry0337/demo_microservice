@@ -1,16 +1,19 @@
 package com.demo.auth.service;
 
 import com.demo.auth.client.UserClient;
+import com.demo.auth.dto.request.ChangePasswordRequest;
+import com.demo.auth.dto.response.ChangePasswordResponse;
+import com.demo.auth.mapper.UserMapper;
 import com.demo.global.helper.Result;
 import com.demo.auth.dto.request.LoginRequest;
 import com.demo.auth.dto.response.LoginResponse;
 import com.demo.auth.dto.request.RegisterRequest;
 import com.demo.auth.dto.response.RegisterResponse;
 import com.demo.auth.model.User;
+import com.demo.global.service.MailService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,43 +22,44 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 
+/**
+ * @author <a href="https://github.com/henry0337">Moineau</a>, <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
+ */
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class AuthService {
-    AuthenticationManager   manager;
-    ConversionService       conversionService;
     JwtService              jwtService;
+    MailService             mailService;
+    AuthenticationManager   manager;
     UserClient              client;
     PasswordEncoder         encoder;
+    UserMapper              mapper;
 
-    public RegisterResponse register(@NonNull RegisterRequest request) {
+    public Result<RegisterResponse, Exception> register(@NonNull RegisterRequest request) {
         try {
-            var response = conversionService.convert(request, RegisterResponse.class);
-            User newUser = conversionService.convert(response, User.class);
-            if (newUser == null)
-                return new RegisterResponse("", "", "");
+            RegisterResponse response = mapper.fromRegisterRequestToItsResponse(request);
+            User newUser = mapper.fromRegisterResponseToUser(response);
             newUser.setPassword(encoder.encode(request.getPassword()));
             client.save(newUser);
-            return response;
+            return new Result.Success<>(201, response);
         } catch (Exception e) {
-            return new RegisterResponse("", "", "");
+            return new Result.Failure<>(400, e);
         }
     }
 
     public LoginResponse login(@NonNull LoginRequest body) {
-        try {
-            manager.authenticate(new UsernamePasswordAuthenticationToken(body.getEmail(), body.getPassword()));
+        manager.authenticate(new UsernamePasswordAuthenticationToken(body.getEmail(), body.getPassword()));
 
-            var expectUser = client.findByEmail(body.getEmail());
-            User user = expectUser instanceof Result.Success<User> currentUser && currentUser.getBody() != null ? currentUser.getBody() : null;
-            if (user == null) return null;
+        User expectUser = client.findByEmail(body.getEmail());
+        if (expectUser == null) return null;
 
-            String jwt = jwtService.generateTokenWithUserInfo(user);
-            String refreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
-            return new LoginResponse(jwt, refreshToken);
-        } catch (Exception ignored) {
-            return new LoginResponse("", "");
-        }
+        String jwt = jwtService.generateTokenWithUserInfo(expectUser);
+        String refreshToken = jwtService.generateRefreshToken(new HashMap<>(), expectUser);
+        return new LoginResponse(jwt, refreshToken);
+    }
+
+    public ChangePasswordResponse resetPassword(ChangePasswordRequest request) {
+        return null;
     }
 }

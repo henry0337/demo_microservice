@@ -1,17 +1,19 @@
 package com.demo.auth.mapper;
 
+import com.demo.auth.dto.request.RegisterRequest;
 import com.demo.auth.dto.response.RegisterResponse;
 import com.demo.auth.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.lang.Nullable;
 
-@Mapper(uses = UserRegisterResponseMapperConfig.class)
-public interface UserRegisterResponseMapper extends Converter<RegisterResponse, User> {
+/**
+ * @author <a href="https://github.com/henry0337">Moineau</a>, <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
+ */
+@Mapper
+public interface UserMapper {
+    @Mapping(target = "avatar", constant = "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg")
+    RegisterResponse fromRegisterRequestToItsResponse(RegisterRequest request);
 
-    @Override
-    @Nullable
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "role", ignore = true)
@@ -21,5 +23,5 @@ public interface UserRegisterResponseMapper extends Converter<RegisterResponse, 
     @Mapping(target = "canAuthenticate", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    User convert(@Nullable RegisterResponse source);
+    User fromRegisterResponseToUser(RegisterResponse response);
 }

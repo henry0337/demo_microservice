@@ -13,6 +13,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author <a href="https://github.com/henry0337">Moineau</a>, <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
+ */
 @Setter
 @Builder
 @NoArgsConstructor
@@ -29,6 +32,7 @@ public class User implements UserDetails {
     @Getter
     String name;
 
+    @Getter
     @Column(unique = true, nullable = false)
     String email;
 
@@ -41,8 +45,9 @@ public class User implements UserDetails {
 
     @JsonIgnore
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     @Getter
-    Role role;
+    Role role = Role.USER;
 
     @JsonIgnore
     @ColumnDefault("0")
@@ -84,6 +89,7 @@ public class User implements UserDetails {
     @Getter
     Date updatedAt = new Date();
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.toString()));

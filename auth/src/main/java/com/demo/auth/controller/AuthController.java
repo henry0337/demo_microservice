@@ -1,19 +1,19 @@
 package com.demo.auth.controller;
 
 import com.demo.auth.dto.request.LoginRequest;
-import com.demo.auth.dto.response.LoginResponse;
 import com.demo.auth.dto.request.RegisterRequest;
+import com.demo.auth.dto.response.LoginResponse;
 import com.demo.auth.dto.response.RegisterResponse;
 import com.demo.auth.service.AuthService;
 import com.demo.auth.service.JwtService;
 import com.demo.auth.model.User;
 import com.demo.global.annotation.ApiController;
+import com.demo.global.helper.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +26,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 /**
- * @author Moineau
+ * @author <a href="https://github.com/henry0337">Moineau</a>, <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
  */
 @ApiController("/api/v1/auth")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
-@Slf4j
 public class AuthController {
     AuthService authService;
     JwtService jwtService;
@@ -47,9 +46,11 @@ public class AuthController {
      */
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest request) {
+        Result<RegisterResponse, Exception> response = authService.register(request);
+
         return ResponseEntity
                 .status(HttpStatusCode.valueOf(201))
-                .body(authService.register(request));
+                .body(response instanceof Result.Success<RegisterResponse> result ? result.getBody() : null);
     }
 
     /**
@@ -102,7 +103,6 @@ public class AuthController {
         if (authentication instanceof JwtAuthenticationToken jwtAuth) {
             return jwtAuth.getToken().getTokenValue();
         } else {
-            log.warn("SecurityContext did not find any token. Did you forget using \"Bearer Token\" field ?");
             throw new IllegalStateException("SecurityContext doesn't contain any token");
         }
     }

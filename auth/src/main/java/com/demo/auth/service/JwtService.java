@@ -16,16 +16,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * @author <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
+ */
 @Service
 public class JwtService {
-
     public String generateTokenWithUserInfo(@NonNull User user) {
         Map<String, Object> claims = new HashMap<>();
 
         claims.put("id", user.getId());
-        claims.put("roles", user.getRole().toString());
-        claims.put("name", user.getName());
-        claims.put("email", user.getUsername());
+        claims.put("role", user.getRole().toString());
 
         return Jwts.builder()
                 .claims(claims)

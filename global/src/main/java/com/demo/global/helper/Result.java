@@ -1,6 +1,7 @@
 package com.demo.global.helper;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -12,23 +13,25 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param <B> Kiểu dữ liệu trả về khi tác vụ thành công.
  * @param <E> Kiểu ngoại lệ trả về khi tác vụ thất bại.
- * @author <a href="https://github.com/henry0337">Moineau</a>, <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
+ * @author <a href="https://github.com/henry0337">Moineau</a>
  */
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@AllArgsConstructor
 public sealed class Result<B, E extends Throwable> permits Result.Success, Result.Failure {
     /**
      * Mã trạng thái HTTP trả về.
      * @see <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status">Mã trạng thái HTTP</a>
      */
     @Getter
-    private final int code;
+    int code;
 
     /**
      * Lớp đại diện cho trạng thái <b>thành công</b> của tác vụ.
      */
+    @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
     public static final class Success<B> extends Result<B, Exception> {
         @Getter
-        private final B body;
+        B body;
 
         public Success(int code, B body) {
             super(code);
@@ -39,11 +42,12 @@ public sealed class Result<B, E extends Throwable> permits Result.Success, Resul
     /**
      * Lớp đại diện cho trạng thái <b>thất bại</b> của tác vụ.
      */
-    public static final class Failure<E extends Throwable> extends Result<Object, E> {
+    @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+    public static final class Failure<T, F extends Throwable> extends Result<T, F> {
         @Getter
-        private final String message;
+        String message;
 
-        public Failure(int code, @NotNull E error) {
+        public Failure(int code, @NotNull F error) {
             super(code);
             this.message = error.getLocalizedMessage();
         }

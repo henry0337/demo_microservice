@@ -27,8 +27,10 @@ dependencyManagement {
 
 dependencies {
     implementation(libs.spring.web)
-    implementation(libs.spring.cloud.eureka.server)
-    implementation(libs.caffeine)
+    implementation(libs.spring.cloud.eureka.server) {
+        exclude group: 'org.springframework.cloud', module: 'spring-cloud-starter-loadbalancer'
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-aop'
+    }
 }
 
 test {

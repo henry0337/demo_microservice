@@ -1,7 +1,7 @@
 package com.demo.user.service;
 
 import com.demo.auth.model.User;
-import com.demo.global.service.CrudService;
+import com.demo.global.template.service.crud.CustomCrudService;
 import com.demo.user.repository.UserRepository;
 import com.demo.user.repository.UserSpecification;
 import com.demo.global.helper.Result;
@@ -16,10 +16,13 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+/**
+ * @author <a href="https://github.com/henry0337">Moineau</a>, <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
+ */
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
-public class UserService implements CrudService<User, String> {
+public class UserService implements CustomCrudService<User, String> {
     UserRepository      repository;
     PasswordEncoder     encoder;
     UserSpecification   specification;
@@ -32,11 +35,15 @@ public class UserService implements CrudService<User, String> {
                 : new Result.Success<>(200, result);
     }
 
-    public Result<User, Exception> findByEmail(String email) {
+    public Result<User, Exception> findByCriteria(String email) {
         Optional<User> user = repository.findOne(specification.findByCriteria("email", email));
-        return user.<Result<User, Exception>>map(value ->
-                        new Result.Success<>(200, value))
+        return user
+                .<Result<User, Exception>>map(value -> new Result.Success<>(200, value))
                 .orElseGet(() -> new Result.Success<>(204, null));
+    }
+
+    public User findByEmail(String email) {
+        return repository.findOne(specification.findByCriteria("email", email)).orElseThrow();
     }
 
     public Result<?, Exception> save(@NonNull User user) {
@@ -62,14 +69,13 @@ public class UserService implements CrudService<User, String> {
             newUser.setIsAccountExpired(user.getIsAccountExpired());
             newUser.setIsCredentialsExpired(user.getIsCredentialsExpired());
             newUser.setIsAccountLocked(user.getIsAccountLocked());
-
             return new Result.Success<>(200, repository.save(newUser));
         } catch (Exception e) {
             return new Result.Failure<>(400, e);
         }
     }
 
-    public Result<?, Exception> deleteByEmail(String email) {
+    public Result<?, Exception> delete(String email) {
         try {
             long deletedCount = repository.delete(specification.findByCriteria("email", email));
             if (deletedCount == 1) {

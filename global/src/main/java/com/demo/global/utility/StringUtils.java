@@ -7,6 +7,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
+/**
+ * Lớp công cụ chứa các hàm giúp xử lý chuỗi.
+ * @author <a href="https://github.com/henry0337">Moineau</a>, <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StringUtils {
     private static final Random rnd = new Random();
@@ -15,7 +19,6 @@ public class StringUtils {
      * Khởi tạo một số ngẫu nhiên với độ dài {@code length} dưới dạng là một {@linkplain String chuỗi}.
      * @param length Độ dài của số (chuỗi) đó
      * @return Một số ngẫu nhiên ở dạng chuỗi.
-     * @author Moineau
      */
     @NotNull
     public static String generateRandomNumberAsString(int length) {
@@ -115,23 +118,5 @@ public class StringUtils {
     public static String replaceSpecialCharacters(String str, char replacement) {
         if (isBlank(str)) return null;
         return str.replaceAll("[^a-zA-Z0-9]", String.valueOf(replacement));
-    }
-
-    /**
-     * Đếm số lần xuất hiện của một chuỗi con trong chuỗi chính.
-     *
-     * @param str    Chuỗi chính.
-     * @param subStr Chuỗi con cần đếm.
-     * @return Số lần xuất hiện, hoặc 0 nếu một trong hai chuỗi là null hoặc rỗng.
-     */
-    public static int countOccurrences(String str, String subStr) {
-        if (isBlank(str) || isBlank(subStr)) return 0;
-        int count = 0;
-        int index = 0;
-        while ((index = str.indexOf(subStr, index)) != -1) {
-            count++;
-            index += subStr.length();
-        }
-        return count;
     }
 }

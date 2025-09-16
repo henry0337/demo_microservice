@@ -12,6 +12,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
+/**
+ * @author <a href="https://vnpay.vn/">CTT VNPAY</a>
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VNPayUtil {
 

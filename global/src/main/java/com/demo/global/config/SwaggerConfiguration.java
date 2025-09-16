@@ -7,6 +7,9 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @author <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
+ */
 @Configuration
 public class SwaggerConfiguration {
     private static final String OPENAPI_VERSION = "3.1.1";

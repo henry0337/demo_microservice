@@ -1,11 +1,8 @@
 package com.demo.auth.config;
 
-import com.demo.auth.client.UserClient;
-import com.demo.auth.model.User;
-import com.demo.auth.service.AuthService;
 import com.demo.auth.annotation.ServletSecurityConfiguration;
+import com.demo.auth.client.UserClient;
 import com.demo.auth.model.Role;
-import com.demo.global.helper.Result;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -25,10 +22,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
+/**
+ * @author <a href="https://github.com/henry0337">Moineau</a>, <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
+ */
 @ServletSecurityConfiguration
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class SecurityConfiguration {
+    JwtFilter filter;
+    UserClient client;
+
     String[] globalAccessRoutes = {
             "/api/v1/auth/**",
             "/api/v1/user/**",
@@ -43,9 +46,6 @@ public class SecurityConfiguration {
     };
 
     String[] adminOnlyRoutes = {};
-
-    JwtFilter filter;
-    UserClient client;
 
     @Bean
     SecurityFilterChain securityFilterChain(@NonNull HttpSecurity http) throws Exception {
@@ -81,10 +81,8 @@ public class SecurityConfiguration {
         return configuration.getAuthenticationManager();
     }
 
+    @NonNull
     private UserDetailsService userDetailsService() {
-        return username -> {
-            Result<User, Exception> expectUser = client.findByEmail(username);
-            return expectUser instanceof Result.Success<User> currentUser && currentUser.getBody() != null ? currentUser.getBody() : null;
-        };
+        return client::findByEmail;
     }
 }
