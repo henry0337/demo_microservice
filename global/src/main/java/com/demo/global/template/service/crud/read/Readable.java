@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Giao diện để đọc các thực thể.
  * @param <T> Kiểu của thực thể
- * @author <a href="https://github.com/henry0337">Moineau</a>, <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
+ * @author <a href="https://github.com/henry0337">Moineau</a>
  */
 @FunctionalInterface
 public interface Readable<T> {

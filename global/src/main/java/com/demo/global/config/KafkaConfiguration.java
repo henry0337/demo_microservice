@@ -22,7 +22,7 @@ package com.demo.global.config;
 //import java.util.Map;
 
 /**
- * @author <a href="https://github.com/henry0337">Moineau</a>
+ * @author <a href="https://github.com/henry0337">Moineau</a>, <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
  */
 //@ApacheKafkaConfiguration
 public class KafkaConfiguration {

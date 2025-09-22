@@ -5,7 +5,7 @@ import com.demo.global.helper.Result;
 /**
  * Giao diện hàm để xóa một thực thể dựa trên tiêu chí.
  * @param <C> Kiểu của tiêu chí
- * @author <a href="https://github.com/henry0337">Moineau</a>, <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
+ * @author <a href="https://github.com/henry0337">Moineau</a>
  */
 @FunctionalInterface
 public interface Deletable<C> {

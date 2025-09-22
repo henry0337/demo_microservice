@@ -39,41 +39,35 @@ public class User implements UserDetails {
     @Column(nullable = false)
     String password;
 
-    @Builder.Default
     @Getter
+    @Builder.Default
     String avatar = "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg";
 
-    @JsonIgnore
     @Enumerated(EnumType.STRING)
     @Builder.Default
     @Getter
     Role role = Role.USER;
 
-    @JsonIgnore
     @ColumnDefault("0")
     @Builder.Default
     @Getter
     short isAccountExpired = 0;
 
-    @JsonIgnore
     @ColumnDefault("0")
     @Builder.Default
     @Getter
     short isAccountLocked = 0;
 
-    @JsonIgnore
     @ColumnDefault("0")
     @Builder.Default
     @Getter
     short isCredentialsExpired = 0;
 
-    @JsonIgnore
     @ColumnDefault("1")
     @Builder.Default
     @Getter
-    short canAuthenticate = 1;
+    short status = 1;
 
-    @JsonIgnore
     @Builder.Default
     @Temporal(TemporalType.TIMESTAMP)
     @ColumnDefault("CURRENT_TIMESTAMP")
@@ -81,7 +75,6 @@ public class User implements UserDetails {
     @Getter
     Date createdAt = new Date();
 
-    @JsonIgnore
     @Builder.Default
     @Temporal(TemporalType.TIMESTAMP)
     @ColumnDefault("CURRENT_TIMESTAMP")
@@ -105,23 +98,27 @@ public class User implements UserDetails {
         return password;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return isAccountExpired == 0;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return isAccountLocked == 0;
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return isCredentialsExpired == 0;
     }
 
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
-        return canAuthenticate == 1;
+        return status == 1;
     }
 }

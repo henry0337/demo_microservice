@@ -6,6 +6,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -17,9 +19,12 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
+ * Dịch vụ xử lý và tương tác với <b>JWT (JSON Web Token)</b>.
+ * @see <a href="https://www.jwt.io/introduction#what-is-json-web-token">JSON Web Token</a>
  * @author <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
  */
 @Service
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class JwtService {
     public String generateTokenWithUserInfo(@NonNull User user) {
         Map<String, Object> claims = new HashMap<>();
@@ -69,7 +74,7 @@ public class JwtService {
 
     @NonNull
     private SecretKey getSignInKey() {
-        byte[] key = Decoders.BASE64.decode("my_secret");
+        byte[] key = Decoders.BASE64.decode("37405a74de628d7d66e7af2ce4aea13076b382685498876bca5e76cb4a8a73f4");
         return Keys.hmacShaKeyFor(key);
     }
 

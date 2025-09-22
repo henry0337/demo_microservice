@@ -14,9 +14,9 @@ import com.demo.global.service.MailService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +28,7 @@ import java.util.HashMap;
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
+@Slf4j
 public class AuthService {
     JwtService              jwtService;
     MailService             mailService;
@@ -37,29 +38,35 @@ public class AuthService {
     UserMapper              mapper;
 
     public Result<RegisterResponse, Exception> register(@NonNull RegisterRequest request) {
+        RegisterResponse response = mapper.fromRegisterRequestToItsResponse(request);
+        User newUser = mapper.fromRegisterResponseToUser(response);
         try {
-            RegisterResponse response = mapper.fromRegisterRequestToItsResponse(request);
-            User newUser = mapper.fromRegisterResponseToUser(response);
-            newUser.setPassword(encoder.encode(request.getPassword()));
+            newUser.setPassword(response.password());
             client.save(newUser);
             return new Result.Success<>(201, response);
         } catch (Exception e) {
+            log.error(e.getLocalizedMessage());
             return new Result.Failure<>(400, e);
         }
     }
 
-    public LoginResponse login(@NonNull LoginRequest body) {
-        manager.authenticate(new UsernamePasswordAuthenticationToken(body.getEmail(), body.getPassword()));
+    public Result<LoginResponse, Exception> login(@NonNull LoginRequest body) throws DisabledException, LockedException {
+        try {
+            manager.authenticate(new UsernamePasswordAuthenticationToken(body.getEmail(), body.getPassword()));
+        } catch (Exception e) {
+            log.error(e.getLocalizedMessage());
+            throw new RuntimeException("Thông tin dùng để kiểm tra xác thực không hợp lệ!");
+        }
 
-        User expectUser = client.findByEmail(body.getEmail());
+        var expectUser = client.findByEmail(body.getEmail());
         if (expectUser == null) return null;
 
         String jwt = jwtService.generateTokenWithUserInfo(expectUser);
         String refreshToken = jwtService.generateRefreshToken(new HashMap<>(), expectUser);
-        return new LoginResponse(jwt, refreshToken);
+        return new Result.Success<>(201, new LoginResponse(jwt, refreshToken));
     }
 
-    public ChangePasswordResponse resetPassword(ChangePasswordRequest request) {
+    public Result<ChangePasswordResponse, Exception> resetPassword(ChangePasswordRequest request) {
         return null;
     }
 }

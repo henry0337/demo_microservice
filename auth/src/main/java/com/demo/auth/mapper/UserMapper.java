@@ -11,16 +11,17 @@ import org.mapstruct.Mapping;
  */
 @Mapper
 public interface UserMapper {
-    @Mapping(target = "avatar", constant = "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg")
     RegisterResponse fromRegisterRequestToItsResponse(RegisterRequest request);
 
+    @Mapping(target = "avatar",
+            constant = "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg")
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "password", ignore = true)
     @Mapping(target = "role", ignore = true)
+    @Mapping(target = "password", ignore = true)
     @Mapping(target = "isCredentialsExpired", ignore = true)
     @Mapping(target = "isAccountLocked", ignore = true)
     @Mapping(target = "isAccountExpired", ignore = true)
-    @Mapping(target = "canAuthenticate", ignore = true)
+    @Mapping(target = "status", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     User fromRegisterResponseToUser(RegisterResponse response);

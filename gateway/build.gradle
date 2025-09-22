@@ -5,12 +5,11 @@ plugins {
     alias(libs.plugins.spring.dependency.management)
 }
 
-group = 'com.example'
+group = 'com.demo'
 version = '0.1'
-description = 'Local Eureka server for Demo Microservice'
 
 ext {
-    set('springCloudVersion', '2025.0.0')
+    set('springCloudVersion', "2025.0.0")
 }
 
 dependencyManagement {
@@ -21,10 +20,9 @@ dependencyManagement {
 
 dependencies {
     implementation(libs.spring.web)
-    implementation(libs.spring.cloud.eureka.server) {
-        exclude group: 'org.springframework.cloud', module: 'spring-cloud-starter-loadbalancer'
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-aop'
-    }
+    implementation(libs.spring.cloud.eureka.client)
+    implementation(libs.spring.cloud.gateway)
+    implementation(libs.spring.cloud.function)
 }
 
 test {

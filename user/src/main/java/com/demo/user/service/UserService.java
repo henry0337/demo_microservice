@@ -2,6 +2,8 @@ package com.demo.user.service;
 
 import com.demo.auth.model.User;
 import com.demo.global.template.service.crud.CustomCrudService;
+import com.demo.global.template.service.crud.read.ReadableWithCriteria;
+import com.demo.global.template.service.crud.read.ReadableWithID;
 import com.demo.user.repository.UserRepository;
 import com.demo.user.repository.UserSpecification;
 import com.demo.global.helper.Result;
@@ -22,10 +24,10 @@ import java.util.Optional;
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
-public class UserService implements CustomCrudService<User, String> {
+public class UserService implements CustomCrudService<User, String>, ReadableWithID<User, String> {
     UserRepository      repository;
-    PasswordEncoder     encoder;
     UserSpecification   specification;
+    PasswordEncoder     encoder;
 
     @NonNull
     public Result<List<User>, Exception> findAll() {
@@ -42,6 +44,16 @@ public class UserService implements CustomCrudService<User, String> {
                 .orElseGet(() -> new Result.Success<>(204, null));
     }
 
+    /**
+     * Tìm kiếm bản ghi bằng email của người dùng.
+     *
+     * @param email email của người dùng cần tìm kiếm.
+     * @return {@link User} có email trên
+     * @throws NoSuchElementException Nếu như không có bản ghi nào được tìm thấy.
+     * @apiNote Hàm này được viết ra dành riêng cho lớp {@link com.demo.auth.client.UserClient UserClient}, để tuân theo
+     * convention tốt nhất, bạn nên sử dụng hàm {@link ReadableWithCriteria#findByCriteria findByCriteria()} và tụ cung cấp
+     * {@link org.springframework.data.jpa.domain.Specification Specification} theo nhu cầu của bạn khi triển khai.
+     */
     public User findByEmail(String email) {
         return repository.findOne(specification.findByCriteria("email", email)).orElseThrow();
     }
@@ -63,7 +75,7 @@ public class UserService implements CustomCrudService<User, String> {
 
             User newUser = currentUser.get();
             newUser.setName(user.getName());
-            newUser.setPassword(encoder.encode(user.getPassword()));
+            newUser.setPassword(user.getPassword());
             newUser.setAvatar(user.getAvatar());
             newUser.setRole(user.getRole());
             newUser.setIsAccountExpired(user.getIsAccountExpired());
@@ -86,6 +98,11 @@ public class UserService implements CustomCrudService<User, String> {
         } catch (Exception e) {
             return new Result.Failure<>(500, e);
         }
+    }
+
+    @Override
+    public Result<User, Exception> findById(String s) {
+        return null;
     }
 }
 

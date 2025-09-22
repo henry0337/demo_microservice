@@ -8,6 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 /**
  * <p>Dịch vụ xử lý thông tin người dùng.</p>
  * <b>Tên client trong Eureka Discovery</b>: {@code user-service}
+ *
  * @author <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
  */
 @SpringBootApplication

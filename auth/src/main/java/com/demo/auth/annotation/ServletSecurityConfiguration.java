@@ -10,14 +10,14 @@ import java.lang.annotation.*;
 /**
  * Đánh dấu một lớp {@link Configuration @Configuration} được cấu hình dành riêng cho tính năng
  * <a href="https://spring.io/projects/spring-security#overview">bảo mật</a> thuộc
- * <a href="https://docs.spring.io/spring-security/reference/servlet/getting-started.html">framework MVC</a>.
+ * <a href="https://docs.spring.io/spring-security/reference/servlet/getting-started.html">framework WebMVC</a>.
  * @see EnableWebSecurity
  * @see EnableMethodSecurity
  * @author <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
  */
 @Configuration
 @EnableWebSecurity
-//@EnableMethodSecurity(proxyTargetClass = true)
+@EnableMethodSecurity(proxyTargetClass = true)
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented

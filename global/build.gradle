@@ -24,8 +24,9 @@ dependencies {
     implementation(libs.swagger)
     implementation(libs.spring.data.jpa)
     implementation(libs.spring.mail)
-//    implementation(libs.spring.cloud.circuitbreaker.resilience4j)
-//    implementation(libs.spring.cloud.circuitbreaker.retry)
+    implementation(libs.spring.cloud.circuitbreaker.resilience4j)
+    implementation(libs.spring.cloud.circuitbreaker.retry)
+    implementation(libs.spring.cloud.openfeign)
 //    implementation(libs.spring.kafka)
 
     compileOnly(libs.lombok)

@@ -9,12 +9,6 @@ group = 'com.example'
 version = '0.1'
 description = "User Service for Demo Microservice"
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
-
 configurations {
     compileOnly {
         extendsFrom(annotationProcessor)

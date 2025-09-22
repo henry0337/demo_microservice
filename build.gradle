@@ -8,4 +8,11 @@ plugins {
 allprojects {
     group = 'com.example'
     version = '0.1'
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
+
 }

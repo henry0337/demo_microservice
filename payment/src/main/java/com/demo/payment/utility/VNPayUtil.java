@@ -62,7 +62,7 @@ public class VNPayUtil {
         List<String> fieldNames = new ArrayList<>(fields.keySet());
         Collections.sort(fieldNames);
 
-        final var sb = new StringBuilder();
+        var sb = new StringBuilder();
         Iterator<String> itr = fieldNames.iterator();
 
         while (itr.hasNext()) {

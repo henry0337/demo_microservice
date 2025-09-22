@@ -37,7 +37,6 @@ public class SecurityConfiguration {
             "/api/v1/user/**",
             "/swagger-ui/**",
             "/v3/api-docs/**",
-            "/api/v1/user/**",
             "/api/shutdown"
     };
 
@@ -51,7 +50,7 @@ public class SecurityConfiguration {
     SecurityFilterChain securityFilterChain(@NonNull HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(route -> route
+                .authorizeHttpRequests(registry -> registry
                         .requestMatchers(globalAccessRoutes).permitAll()
                         .requestMatchers(roleAuthorizingRoutes).hasAnyRole(Role.ADMIN.name(), Role.USER.name())
                         .requestMatchers(adminOnlyRoutes).hasRole(Role.ADMIN.name())

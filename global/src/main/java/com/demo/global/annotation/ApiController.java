@@ -7,20 +7,17 @@ import org.springframework.web.bind.annotation.RestController;
 import java.lang.annotation.*;
 
 /**
- * Đơn giản hóa việc định nghĩa một <b>controller</b> cho REST API bằng cách kết hợp {@link RestController @RestController}
+ * Đơn giản hóa việc định nghĩa một <b>REST controller</b> bằng cách kết hợp {@link RestController @RestController}
  * và {@link RequestMapping @RequestMapping}.
- * <p>
- * Annotation này được sử dụng trên một lớp để đánh dấu nó là một REST Controller và ánh xạ các yêu cầu tới một đường dẫn cụ thể.
- *
  * <p><b>Ví dụ:</b></p>
  * <pre>{@code
  * @ApiController("/api/test")
  * public class TestController { }
  * }</pre>
  *
+ * @author <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
  * @see RestController
  * @see RequestMapping
- * @author <a href="https://github.com/henry0337">Moineau</a>, <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
  */
 @RestController
 @RequestMapping
@@ -38,4 +35,7 @@ public @interface ApiController {
      */
     @AliasFor(attribute = "path", annotation = RequestMapping.class)
     String[] value() default {};
+
+    @AliasFor("value")
+    String[] path() default {};
 }

@@ -26,14 +26,6 @@ public class MailService {
     @NonFinal
     String sender;
 
-    /**
-     *
-     * @param subject
-     * @param content
-     * @param recipient
-     * @param cc
-     * @param bcc
-     */
     public void sendMail(
             @NonNull String subject,
             @NonNull String content,

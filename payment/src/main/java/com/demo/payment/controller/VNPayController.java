@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author <a href="https://github.com/henry0337">Moineau</a>, <a href="https://github.com/ClaudiaDthOrNot">Claudia</a>
+ * @author <a href="https://github.com/henry0337">Moineau</a>
  */
 @ApiController("/api/v1/payment/vnpay")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -43,7 +43,7 @@ public class VNPayController {
 
     private String obtainCurrentIp(@NonNull HttpServletRequest request) {
         String forwardedHeader = request.getHeader("X-Forwarded-For");
-        if (forwardedHeader == null) return request.getRemoteAddr();
+        if (forwardedHeader != null) return request.getRemoteAddr();
         return "";
     }
 }
